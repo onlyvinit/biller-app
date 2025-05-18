@@ -1,0 +1,23 @@
+.tables-list {
+    border: none;
+    width: 100%;
+}
+
+.close-btn{
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+.add-table {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+.add-table input{
+    padding: 5px;
+}
+.add-table button{
+    background: rgb(154, 133, 88);
+    color: white;
+}

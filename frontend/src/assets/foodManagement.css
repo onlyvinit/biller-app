@@ -1,0 +1,328 @@
+/* General Layout */
+.food-management {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: #fff3e0; /* Light orange tint */
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.dark-mode .food-management {
+  background: #3e2723; /* Dark brown */
+}
+
+/* Food Category Section (Wrapper) */
+.food-category-section {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Categories Section */
+.categories-section {
+  width: 35%;
+  padding: 1rem;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  min-width: 200px; /* Reduced for smaller screens */
+  box-sizing: border-box;
+}
+
+.dark-mode .categories-section {
+  background: #4a2c28;
+  color: #ef6c00;
+}
+
+.categories-section h2 {
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: #3e2723;
+}
+
+.dark-mode .categories-section h2 {
+  color: #ef6c00;
+}
+
+.categories-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categories-section li {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #c55800;
+  color: #3e2723;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+}
+
+.categories-section li:hover {
+  background-color: #fff3e0;
+}
+
+.dark-mode .categories-section li:hover {
+  background-color: #5a3c36;
+}
+
+.categories-section li.active {
+  background-color: #ef6c00;
+  color: white;
+  font-weight: bold;
+}
+
+.categories-section li:focus {
+  outline: 2px solid #3e2723;
+}
+
+/* Food Items Section */
+.food-items-section {
+  width: 65%;
+  padding: 1rem;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  min-width: 300px; /* Reduced for mobile */
+  box-sizing: border-box;
+}
+
+.dark-mode .food-items-section {
+  background: #4a2c28;
+}
+
+.food-items-section h2 {
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: #3e2723;
+}
+
+.dark-mode .food-items-section h2 {
+  color: #ef6c00;
+}
+
+/* Delete Button */
+.delete-selected-btn {
+  background-color: #dc3545; /* Red for delete */
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  transition: background-color 0.3s ease;
+}
+
+.delete-selected-btn:hover {
+  background-color: #b02a37;
+}
+
+.delete-selected-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.delete-selected-btn:focus {
+  outline: 2px solid #3e2723;
+}
+
+/* Food Items Table */
+.food-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.food-items-table th,
+.food-items-table td {
+  padding: 0.5rem;
+  border: 1px solid #c55800;
+  text-align: left;
+  color: #3e2723;
+  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+}
+
+.dark-mode .food-items-table th,
+.dark-mode .food-items-table td {
+  color: #ef6c00;
+  border-color: #ef6c00;
+}
+
+.food-items-table tr:nth-child(even) {
+  background-color: #fff3e0;
+}
+
+.dark-mode .food-items-table tr:nth-child(even) {
+  background-color: #5a3c36;
+}
+
+.food-items-table tr:hover {
+  background-color: #ffe0b2;
+}
+
+.dark-mode .food-items-table tr:hover {
+  background-color: #6a4c46;
+}
+
+/* Input Fields */
+.food-items-table input {
+  padding: 0.3rem;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #c55800;
+  border-radius: 4px;
+  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+}
+
+.food-items-table input:focus {
+  outline: 2px solid #ef6c00;
+  border-color: #ef6c00;
+}
+
+.dark-mode .food-items-table input {
+  background: #4a2c28;
+  color: #ffffff;
+  border-color: #ef6c00;
+}
+
+/* Edit/Save Buttons */
+.food-items-table button {
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  background-color: #ef6c00;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+  transition: background-color 0.3s ease;
+}
+
+.food-items-table button:hover {
+  background-color: #c55800;
+}
+
+.food-items-table button:focus {
+  outline: 2px solid #3e2723;
+}
+
+/* Food Form */
+.food-form {
+  max-width: 90%; /* More flexible than 65vw */
+  padding: 1rem;
+  background: #fff3e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .food-form {
+  background: #4a2c28;
+}
+
+.food-form h3 {
+  text-align: center;
+  color: #3e2723;
+  margin-bottom: 1rem;
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+}
+
+.dark-mode .food-form h3 {
+  color: #ef6c00;
+}
+
+.food-form form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.food-form input,
+.food-form select {
+  flex: 1;
+  min-width: 150px;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #c55800;
+  border-radius: 5px;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+}
+
+.food-form input:focus,
+.food-form select:focus {
+  border-color: #ef6c00;
+  outline: 2px solid #ef6c00;
+}
+
+.dark-mode .food-form input,
+.dark-mode .food-form select {
+  background: #4a2c28;
+  color: #ffffff;
+  border-color: #ef6c00;
+}
+
+.food-form button {
+  padding: 0.5rem 1rem;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  font-weight: bold;
+  color: white;
+  background: #ef6c00;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.food-form button:hover {
+  background: #c55800;
+}
+
+.food-form button:focus {
+  outline: 2px solid #3e2723;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .food-management {
+    padding: 0.5rem;
+  }
+
+  .food-category-section {
+    flex-direction: column;
+  }
+
+  .categories-section,
+  .food-items-section {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 500px) {
+  .food-form {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+
+  .food-form form {
+    flex-direction: column;
+  }
+
+  .food-form input,
+  .food-form select {
+    min-width: 100%;
+    font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+  }
+
+  .food-form button {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .food-items-table th,
+  .food-items-table td {
+    font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+    padding: 0.3rem;
+  }
+}

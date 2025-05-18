@@ -1,0 +1,229 @@
+/* Category Management Container */
+.category-container {
+  padding: 1rem; /* Unified padding, using rem for scalability */
+  background: white;
+  border-radius: 10px;
+  max-height: 70vh; /* Adjusted for better mobile fit */
+  overflow-y: auto; /* Vertical scroll if needed */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  box-sizing: border-box;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.category-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dark mode styles */
+.dark-mode .category-container {
+  background: #3e2723; /* Warm dark brown */
+  color: #ef6c00; /* Bright orange for text */
+}
+
+/* Category Food Management Wrapper */
+.category-food-management {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .category-food-management {
+  background: #2e1c1a; /* Darker brown for dark mode */
+}
+
+/* Header */
+#category-header {
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 2vw, 1.5rem); /* Responsive font size */
+  color: #3e2723;
+}
+
+.dark-mode #category-header {
+  color: #ef6c00;
+}
+
+/* Category Form */
+.category-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap; /* Wrap for small screens */
+}
+
+/* Input Fields */
+.category-input,
+.category-edit-input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  border: 1px solid #c55800; /* Orange accent */
+  border-radius: 5px;
+  min-width: 150px; /* Prevent collapse on small screens */
+}
+
+.category-input:focus,
+.category-edit-input:focus {
+  outline: 2px solid #ef6c00; /* Highlight focus with orange */
+  border-color: #ef6c00;
+}
+
+.dark-mode .category-input,
+.dark-mode .category-edit-input {
+  background: #4a2c28;
+  color: #ffffff;
+  border-color: #ef6c00;
+}
+
+/* Add Button */
+.category-add-btn {
+  padding: 0.5rem 0.75rem;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  border: none;
+  border-radius: 6px;
+  background: #ef6c00; /* Warm orange */
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.category-add-btn:hover {
+  background: #c55800; /* Darker orange */
+}
+
+.category-add-btn:focus {
+  outline: 2px solid #3e2723;
+}
+
+/* Category List */
+.category-list {
+  margin-top: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Category Item */
+.category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff3e0; /* Light orange tint */
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.dark-mode .category-item {
+  background: #4a2c28; /* Dark brown */
+}
+
+/* Category Name */
+.category-name {
+  flex: 1;
+  color: #3e2723;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+}
+
+.dark-mode .category-name {
+  color: #ef6c00;
+}
+
+/* Action Buttons */
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn {
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 0.3rem;
+  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.edit-btn {
+  background: #ef6c00; /* Orange */
+}
+
+.edit-btn:hover {
+  background: #c55800;
+}
+
+.delete-btn {
+  background: #dc3545; /* Keep red for delete, high contrast */
+}
+
+.delete-btn:hover {
+  background: #b02a37;
+}
+
+.save-btn {
+  background: #28a745; /* Green for save */
+}
+
+.save-btn:hover {
+  background: #218838;
+}
+
+.cancel-btn {
+  background: #6c757d; /* Gray for cancel */
+}
+
+.cancel-btn:hover {
+  background: #5a6268;
+}
+
+.edit-btn:focus,
+.delete-btn:focus,
+.save-btn:focus,
+.cancel-btn:focus {
+  outline: 2px solid #3e2723;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .category-container {
+    max-height: 80vh; /* More space on mobile */
+    padding: 0.5rem;
+  }
+
+  .category-form {
+    flex-direction: column;
+  }
+
+  .category-input,
+  .category-edit-input {
+    min-width: 100%;
+  }
+
+  .category-add-btn {
+    width: 100%;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .category-container {
+    border-radius: 5px;
+  }
+
+  #category-header {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+  }
+
+  .category-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .edit-btn,
+  .delete-btn,
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    margin-left: 0;
+    padding: 0.5rem;
+  }
+}

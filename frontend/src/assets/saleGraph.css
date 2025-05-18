@@ -1,0 +1,65 @@
+.sales-graph {
+  background: #ffe0b2;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.period-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.period-selector button {
+  padding: 7px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #ef6c00;
+  /* Warm orange */
+  color: #fff8e1;
+  /* Light cream */
+  transition: background-color 0.3s ease;
+}
+
+.period-selector button:hover {
+  background-color: #c55800;
+  /* Darker warm orange */
+}
+
+.chart-container {
+  position: relative;
+  height: 400px;
+  /* Adjust based on your needs */
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .sales-graph {
+    padding: 12px;
+  }
+
+  .period-selector {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .period-selector button {
+    width: 100%;
+  }
+
+  .chart-container {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sales-graph {
+    padding: 10px;
+  }
+
+  .chart-container {
+    height: 250px;
+  }
+}

@@ -1,0 +1,279 @@
+.table-management {
+    position: fixed;
+    bottom: 30px;
+    left: 50px;
+    font-size: 20px;
+    color: #3e2723; /* Dark brown */
+    display: inline-block;
+    cursor: pointer; /* Makes it clear it's interactive */
+}
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(62, 39, 35, 0.5); /* Warm brown semi-transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff8e1; /* Warm cream */
+    padding: 15px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 8px rgba(62, 39, 35, 0.2); /* Warm brown shadow */
+}
+
+/* Owner Dashboard Container */
+.owner-dashboard {
+    display: flex;
+    min-height: 100vh;
+    gap: 15px;
+    padding: 15px;
+    background: #fff8e1; /* Warm cream */
+}
+
+/* Left Section */
+.left-section {
+    flex: 2;
+    background: #ffe0b2; /* Light warm orange */
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Owner Info */
+.owner-info {
+    background: #ffccbc; /* Light warm peach */
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px rgba(62, 39, 35, 0.2); /* Warm brown shadow */
+    margin-bottom: 15px;
+}
+
+.owner-info h2 {
+    margin-bottom: 8px;
+    color: #8c2f00; /* Dark warm brown */
+}
+
+.owner-info p {
+    font-size: 15px;
+    margin: 4px 0;
+    color: #3e2723; /* Dark brown */
+}
+
+/* Right Section */
+.right-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 250px;
+}
+
+/* Biller Management & Category Food Management */
+.biller-management {
+    background: #ffcc80; /* Warm peach */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(62, 39, 35, 0.2); /* Warm brown shadow */
+}
+
+/* Table Styling */
+.biller-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+.biller-table th,
+.biller-table td {
+    border: 1px solid #ffab91; /* Light warm coral */
+    padding: 8px;
+    text-align: left;
+}
+
+.biller-table th {
+    color: #3e2723; /* Dark brown */
+    background: #ffccbc; /* Light warm peach */
+}
+
+.biller-table tr:nth-child(even) {
+    background: #ffe0b2; /* Light warm orange */
+}
+
+.button-group {
+    display: flex;
+    gap: 5px;
+}
+
+/* Buttons */
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s ease-in-out;
+}
+
+/* Edit Button */
+.edit-btn {
+    background: #2e7d32; /* Warm green (matches billerDashboard) */
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #255d27; /* Darker warm green */
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #c62828; /* Warm red (matches billerDashboard) */
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #9f1f1f; /* Darker warm red */
+}
+
+/* Save Button */
+.save-btn {
+    background: #ef6c00; /* Warm orange (matches billerDashboard) */
+    color: white;
+}
+
+.save-btn:hover {
+    background: #c55800; /* Darker warm orange */
+}
+
+/* Cancel Button */
+.cancel-btn {
+    background: #8d6e63; /* Warm muted brown */
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: #6d4c41; /* Darker warm brown */
+}
+
+/* Input Fields for Editing */
+.biller-table input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ffab91; /* Light warm coral */
+    border-radius: 4px;
+    font-size: 13px;
+    background: #ffecb3; /* Light warm yellow */
+    color: #3e2723; /* Dark brown */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .owner-dashboard {
+        flex-direction: column;
+    }
+
+    .left-section,
+    .right-section {
+        width: 100%;
+    }
+
+    .right-section {
+        min-width: unset;
+    }
+}
+
+@media (max-width: 768px) {
+    .owner-dashboard {
+        padding: 10px;
+    }
+
+    .left-section,
+    .biller-management {
+        padding: 12px;
+    }
+
+    .owner-info {
+        padding: 10px;
+    }
+
+    .owner-info h2 {
+        font-size: 1.3em;
+    }
+
+    .owner-info p {
+        font-size: 14px;
+    }
+
+    .biller-table th,
+    .biller-table td {
+        padding: 6px;
+        font-size: 0.9em;
+    }
+
+    .edit-btn,
+    .delete-btn,
+    .save-btn,
+    .cancel-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-management {
+        bottom: 10px;
+        left: 15px;
+        font-size: 13px;
+    }
+
+    .owner-info h2 {
+        font-size: 1.1em;
+    }
+
+    .owner-info p {
+        font-size: 13px;
+    }
+
+    .biller-table {
+        font-size: 0.85em;
+    }
+
+    .biller-table th,
+    .biller-table td {
+        padding: 5px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .edit-btn,
+    .delete-btn,
+    .save-btn,
+    .cancel-btn {
+        width: 100%;
+        padding: 6px;
+    }
+
+    .biller-table input {
+        font-size: 12px;
+    }
+}
