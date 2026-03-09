@@ -1,0 +1,115 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    BILLIFY POS - ACCESS KEY FIX GUIDE                        ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+PROBLEM: "Access key not found" error when using valid key from portal
+
+SOLUTION: Follow these 3 steps (takes 2 minutes total)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: TEST YOUR CONNECTION                                                │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   1. Double-click: test-key.bat
+   
+   2. You should see:
+      ✓ "Successfully connected to MongoDB"
+      ✓ List of keys in database
+   
+   3. When prompted, paste your access key to test it
+   
+   4. This tells you if the problem is:
+      - Database connection (can't connect)
+      - Key mismatch (key not found)
+      - Expiration (key expired)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: REBUILD THE EXECUTABLE                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   1. Double-click: build.bat
+   
+   2. Wait for: "SUCCESS! Executable created successfully!"
+   
+   3. New file created at: dist\Billify-POS.exe
+   
+   WHAT THIS FIXES:
+   ✓ .env file loading (now uses absolute path)
+   ✓ Adds debug output (shows what's happening)
+   ✓ Better key input handling (removes hidden characters)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: TEST WITH FRESH KEY                                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   1. Go to web portal → Biller Portal
+   
+   2. Click "Generate Biller Access Key"
+   
+   3. Triple-click the key to select all → Ctrl+C to copy
+   
+   4. Run: dist\Billify-POS.exe
+   
+   5. You'll see TWO windows:
+      - Main app window
+      - Console window (with debug info)
+   
+   6. Paste key → Click "Authenticate Terminal"
+   
+   7. Watch console window for:
+      [DEBUG] Searching for key: 'YourKey123!' (length: 12)
+      [DEBUG] Key is valid and not expired
+      [DEBUG] Authentication successful for: Biller Terminal
+   
+   8. If successful → You're in! 🎉
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ TROUBLESHOOTING                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   Console shows: "Key not found. Total keys in DB: 0"
+   → Generate a key from the portal first
+   
+   Console shows: "Key not found. Total keys in DB: 5"
+   → Your key doesn't match. Run test-key.bat to see actual keys
+   
+   Console shows: "Key has expired"
+   → Generate a new key (they expire after 3 minutes)
+   
+   Console shows: "Cannot connect to Billify Cloud"
+   → Check internet connection
+   → Verify .env file exists in project root (not in biller-app folder)
+   → Check MONGO_URL in .env is correct
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ AFTER IT WORKS                                                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   Want to hide the console window?
+   
+   1. Open: Billify-POS.spec
+   2. Find: console=True,
+   3. Change to: console=False,
+   4. Run: build.bat
+   
+   Now the app runs without the console window!
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ NEED MORE HELP?                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   See these files for more details:
+   
+   • QUICK-START.md      - Quick fix guide
+   • TROUBLESHOOTING.md  - Detailed diagnostics
+   • FIX-SUMMARY.md      - Technical details
+   • README.md           - Full documentation
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║  Questions? The console window debug output will tell you exactly what's    ║
+║  happening. Run test-key.bat first to diagnose the issue!                   ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
