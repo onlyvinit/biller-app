@@ -97,7 +97,7 @@ billify/
 
    ```env
    # MongoDB Connection
-   MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/?appName=Cluster0
+   MONGO_URL=*USE MONGODB URL*
 
    # JWT Secret (use a strong random string)
    JWT_SECRET=your_secret_key_here
