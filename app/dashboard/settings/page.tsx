@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { User, Bell, Shield, Wallet, Save } from "lucide-react";
 import { useState } from "react";
+import AccountDeletionFlow from "./AccountDeletionFlow";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -44,11 +45,10 @@ export default function Settings() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                    isActive 
-                      ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white" 
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${isActive
+                      ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
                       : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 hover:text-gray-900 dark:hover:text-white"
-                  }`}
+                    }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? "text-gray-900 dark:text-white" : "text-gray-400"}`} />
                   {tab.label}
@@ -62,7 +62,7 @@ export default function Settings() {
           {activeTab === "profile" && (
             <div className="space-y-6">
               <h3 className="text-lg font-semibold border-b border-gray-200 dark:border-gray-800 pb-4">Personal Information</h3>
-              
+
               <div className="flex items-center gap-6">
                 <div className="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl font-bold shrink-0">
                   O
@@ -100,13 +100,15 @@ export default function Settings() {
                   Save Changes
                 </button>
               </div>
+
+              <AccountDeletionFlow />
             </div>
           )}
 
           {activeTab === "notifications" && (
             <div className="space-y-6">
               <h3 className="text-lg font-semibold border-b border-gray-200 dark:border-gray-800 pb-4">Notification Preferences</h3>
-              
+
               <div className="space-y-4">
                 {[
                   { label: "New Invoice Paid", desc: "Get notified when a client pays an invoice." },
