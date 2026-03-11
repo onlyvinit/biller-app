@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { jwtVerify } from "jose";
 
 const resetPasswordSchema = z.object({
-  email: z.string().email().endsWith("@gmail.com"),
-  otp: z.string().length(6),
+  sessionToken: z.string(),
   password: z.string()
     .min(8)
     .regex(/[0-9]/)
@@ -24,7 +24,30 @@ export async function POST(request: Request) {
       );
     }
 
-    const { email, otp, password } = body;
+    const { sessionToken, password } = body;
+
+    // Verify session token
+    let payload;
+    try {
+      const secretKey = "secret";
+      const key = new TextEncoder().encode(process.env.JWT_SECRET || secretKey);
+      const result = await jwtVerify(sessionToken, key, { algorithms: ["HS256"] });
+      payload = result.payload;
+    } catch (err) {
+      return NextResponse.json(
+        { error: "Session expired or invalid. Please request a new OTP." },
+        { status: 401 }
+      );
+    }
+
+    if (payload.intent !== "password_reset" || !payload.email) {
+      return NextResponse.json(
+        { error: "Invalid token type" },
+        { status: 400 }
+      );
+    }
+
+    const email = payload.email as string;
 
     const client = await clientPromise;
     const db = client.db("billify");
@@ -39,25 +62,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify OTP
-    const otps = db.collection("otps");
-    const otpDoc = await otps.findOne({ email });
-
-    if (!otpDoc) {
-      return NextResponse.json(
-        { error: "OTP expired or not found. Please request a new one." },
-        { status: 400 }
-      );
-    }
-
-    const isValidOtp = await bcrypt.compare(otp, otpDoc.otp);
-    if (!isValidOtp) {
-      return NextResponse.json(
-        { error: "Invalid OTP provided" },
-        { status: 400 }
-      );
-    }
-
     // Hash new password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -66,9 +70,6 @@ export async function POST(request: Request) {
       { email },
       { $set: { password: hashedPassword } }
     );
-
-    // Clean up OTP to prevent reuse
-    await otps.deleteOne({ email });
 
     return NextResponse.json({ success: true, message: "Password updated successfully" }, { status: 200 });
   } catch (error: any) {

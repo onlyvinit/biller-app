@@ -9,6 +9,7 @@ import { Edit2, Trash2, X, Check } from "lucide-react";
 
 export default function Billers() {
   const [billers, setBillers] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -127,6 +128,8 @@ export default function Billers() {
     setIsModalOpen(true);
   };
 
+  const filteredBillers = billers.filter(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()) || b.email.toLowerCase().includes(searchQuery.toLowerCase()) || (b.phone && b.phone.includes(searchQuery)));
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -148,6 +151,8 @@ export default function Billers() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search billers..."
           className="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-800 shadow-sm rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
         />
@@ -159,9 +164,11 @@ export default function Billers() {
         <div className="p-12 text-center text-red-500">{error}</div>
       ) : billers.length === 0 ? (
         <div className="p-12 text-center text-gray-500">No billers found. Add your first client!</div>
+      ) : filteredBillers.length === 0 ? (
+        <div className="p-12 text-center text-gray-500">No billers match your search.</div>
       ) : (
         <motion.div variants={container} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-          {billers.map((biller) => (
+          {filteredBillers.map((biller) => (
             <motion.div key={biller.id || biller._id} variants={item} className="bg-white dark:bg-[#0a0a0a] rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm p-6 hover:shadow-md transition-shadow relative group">
 
               <div className="flex  items-center justify-between flex-wrap gap-4 mb-4">
