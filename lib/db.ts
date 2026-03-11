@@ -1,7 +1,12 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGO_URL || "";
-const options = {};
+const options = {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  family: 4 // IPv4, skipping IPv6 which sometimes causes issues locally
+};
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;

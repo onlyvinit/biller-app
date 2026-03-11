@@ -1,45 +1,41 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/db";
 import bcrypt from "bcryptjs";
-import { login } from "@/lib/auth";
 import { z } from "zod";
 
-const signupSchema = z.object({
-  name: z.string().min(2),
+const resetPasswordSchema = z.object({
   email: z.string().email().endsWith("@gmail.com"),
+  otp: z.string().length(6),
   password: z.string()
     .min(8)
     .regex(/[0-9]/)
     .regex(/[^a-zA-Z0-9]/),
-  otp: z.string().length(6),
-  restaurantName: z.string().min(2),
 });
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     
-    // Final check for all data using Zod
-    const validation = signupSchema.safeParse(body);
+    const validation = resetPasswordSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Invalid input data", details: validation.error.flatten().fieldErrors },
+        { error: "Invalid input data", details: validation.error.issues },
         { status: 400 }
       );
     }
 
-    const { name, email, password, otp, restaurantName } = body;
+    const { email, otp, password } = body;
 
     const client = await clientPromise;
     const db = client.db("billify");
-    
-    // Check if user already exists
     const users = db.collection("users");
+    
+    // Check if user exists
     const existingUser = await users.findOne({ email });
-    if (existingUser) {
+    if (!existingUser) {
       return NextResponse.json(
-        { error: "User already exists with this email" },
-        { status: 400 }
+        { error: "No account found with this email" },
+        { status: 404 }
       );
     }
 
@@ -62,33 +58,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Hash password
+    // Hash new password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
-    const result = await users.insertOne({
-      name,
-      email,
-      password: hashedPassword,
-      restaurantName,
-      createdAt: new Date(),
-    });
-
-    const user = {
-      id: result.insertedId.toString(),
-      name,
-      email,
-    };
+    // Update user
+    await users.updateOne(
+      { email },
+      { $set: { password: hashedPassword } }
+    );
 
     // Clean up OTP to prevent reuse
     await otps.deleteOne({ email });
 
-    // Log the user in
-    await login(user);
-
-    return NextResponse.json({ user }, { status: 201 });
+    return NextResponse.json({ success: true, message: "Password updated successfully" }, { status: 200 });
   } catch (error: any) {
-    console.error("Signup error:", error);
+    console.error("Password reset error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
