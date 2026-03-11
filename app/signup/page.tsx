@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Mail, Lock, ArrowRight, User, CheckCircle2, Building2, KeyRound } from "lucide-react";
+import { Zap, Mail, Lock, ArrowRight, User, CheckCircle2, Building2, KeyRound, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
@@ -13,11 +13,12 @@ const step1Schema = z.object({
     .min(8, "Password must be at least 8 characters")
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character"),
+  restaurantName: z.string().min(2, "Restaurant Name must be at least 2 characters"),
+  restaurantAddress: z.string().min(5, "Restaurant Address must be at least 5 characters"),
 });
 
 const step2Schema = z.object({
   otp: z.string().length(6, "OTP must be exactly 6 digits"),
-  restaurantName: z.string().min(2, "Restaurant Name must be at least 2 characters"),
 });
 
 export default function SignupPage() {
@@ -27,6 +28,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [restaurantName, setRestaurantName] = useState("");
+  const [restaurantAddress, setRestaurantAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,7 +37,7 @@ export default function SignupPage() {
     setError("");
 
     // Validate Step 1
-    const validation = step1Schema.safeParse({ name, email, password });
+    const validation = step1Schema.safeParse({ name, email, password, restaurantName, restaurantAddress });
     if (!validation.success) {
       setError(validation.error.issues[0].message);
       return;
@@ -69,7 +71,7 @@ export default function SignupPage() {
     setError("");
 
     // Validate Step 2
-    const validation = step2Schema.safeParse({ otp, restaurantName });
+    const validation = step2Schema.safeParse({ otp });
     if (!validation.success) {
       setError(validation.error.issues[0].message);
       return;
@@ -81,7 +83,7 @@ export default function SignupPage() {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, otp, restaurantName }),
+        body: JSON.stringify({ name, email, password, otp, restaurantName, restaurantAddress }),
       });
 
       const data = await response.json();
@@ -299,6 +301,40 @@ export default function SignupPage() {
                     <p className="text-xs text-gray-500 mt-2">Min 8 chars, 1 number, and 1 special character.</p>
                   </div>
 
+                  <div>
+                    <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Restaurant Name</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Building2 className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        type="text"
+                        value={restaurantName}
+                        onChange={(e) => setRestaurantName(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
+                        placeholder="My Awesome Diner"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Restaurant Address</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <MapPin className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        type="text"
+                        value={restaurantAddress}
+                        onChange={(e) => setRestaurantAddress(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
+                        placeholder="123 Main St, City, Country"
+                        required
+                      />
+                    </div>
+                  </div>
+
                   <button
                     type="submit"
                     disabled={isLoading}
@@ -341,23 +377,6 @@ export default function SignupPage() {
                         maxLength={6}
                         className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 tracking-widest font-mono text-lg"
                         placeholder="000000"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Restaurant Name</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Building2 className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <input
-                        type="text"
-                        value={restaurantName}
-                        onChange={(e) => setRestaurantName(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
-                        placeholder="My Awesome Diner"
                         required
                       />
                     </div>

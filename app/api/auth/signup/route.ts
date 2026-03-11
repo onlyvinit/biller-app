@@ -13,6 +13,7 @@ const signupSchema = z.object({
     .regex(/[^a-zA-Z0-9]/),
   otp: z.string().length(6),
   restaurantName: z.string().min(2),
+  restaurantAddress: z.string().min(5),
 });
 
 export async function POST(request: Request) {
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, email, password, otp, restaurantName } = body;
+    const { name, email, password, otp, restaurantName, restaurantAddress } = body;
 
     const client = await clientPromise;
     const db = client.db("billify");
@@ -71,6 +72,7 @@ export async function POST(request: Request) {
       email,
       password: hashedPassword,
       restaurantName,
+      restaurantAddress,
       createdAt: new Date(),
     });
 

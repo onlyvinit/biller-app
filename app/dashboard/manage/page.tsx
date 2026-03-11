@@ -7,6 +7,7 @@ import Modal from "@/components/ui/Modal";
 
 export default function Manage() {
   const [activeTab, setActiveTab] = useState("menu");
+  const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
   const [items, setItems] = useState<any[]>([]);
   const [tables, setTables] = useState<any[]>([]);
@@ -347,6 +348,11 @@ export default function Manage() {
     }
   };
 
+  const filteredCategories = categories.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredTables = tables.filter(t => t.tableNumber.toString().includes(searchQuery) || (t.location && t.location.toLowerCase().includes(searchQuery.toLowerCase())));
+  const filteredStaff = staff.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()) || (s.role && s.role.toLowerCase().includes(searchQuery.toLowerCase())));
+  const filteredOffers = offers.filter(o => o.title.toLowerCase().includes(searchQuery.toLowerCase()) || (o.code && o.code.toLowerCase().includes(searchQuery.toLowerCase())));
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -379,7 +385,7 @@ export default function Manage() {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => { setActiveTab(tab.id); setSearchQuery(""); }}
                   className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-bold transition-colors whitespace-nowrap ${
                     isActive 
                       ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400" 
@@ -403,6 +409,8 @@ export default function Manage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input 
                 type="text" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`Search ${activeTab}...`} 
                 className="w-full pl-9 pr-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm font-medium"
               />
@@ -415,10 +423,10 @@ export default function Manage() {
             <div className="p-12 text-center text-red-500 font-medium">{error}</div>
           ) : activeTab === "menu" ? (
             <div className="p-4 space-y-3">
-              {categories.length === 0 ? (
-                <div className="p-8 text-center text-gray-500 font-medium">No categories found.</div>
+              {filteredCategories.length === 0 ? (
+                <div className="p-8 text-center text-gray-500 font-medium">{searchQuery ? 'No categories match your search.' : 'No categories found.'}</div>
               ) : (
-                categories.map((category) => {
+                filteredCategories.map((category) => {
                   const isExpanded = expandedCategory === (category._id || category.id);
                   const categoryItems = items.filter(i => i.categoryId === (category._id || category.id));
                   
@@ -574,7 +582,10 @@ export default function Manage() {
           ) : activeTab === "tables" ? (
             <div className="p-6">
               <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-                {tables.map((table) => (
+                {filteredTables.length === 0 ? (
+                  <div className="col-span-full py-12 text-center text-gray-500 font-bold">{searchQuery ? 'No tables match your search.' : 'No tables added yet.'}</div>
+                ) : (
+                filteredTables.map((table) => (
                   <div key={table._id} className="border border-gray-200 dark:border-gray-800 rounded-xl p-5 hover:border-blue-500/50 hover:shadow-md transition-all relative group bg-white dark:bg-[#0a0a0a]">
                     <div className="flex items-center gap-4 mb-4">
                       <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
@@ -610,13 +621,14 @@ export default function Manage() {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))
+                )}
               </div>
             </div>
           ) : activeTab === "staff" ? (
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {staff.map((s) => (
+                {filteredStaff.map((s) => (
                   <div key={s._id} className="border border-gray-200 dark:border-gray-800 rounded-xl p-5 hover:border-blue-500/50 hover:shadow-md transition-all relative group bg-white dark:bg-[#0a0a0a]">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-4">
@@ -659,15 +671,15 @@ export default function Manage() {
                     </div>
                   </div>
                 ))}
-                {staff.length === 0 && (
-                  <div className="col-span-full py-12 text-center text-gray-500 font-bold">No staff members added yet.</div>
+                {filteredStaff.length === 0 && (
+                  <div className="col-span-full py-12 text-center text-gray-500 font-bold">{searchQuery ? 'No staff match your search.' : 'No staff members added yet.'}</div>
                 )}
               </div>
             </div>
           ) : activeTab === "offers" ? (
             <div className="p-6">
               <div className="space-y-4">
-                {offers.map((offer) => (
+                {filteredOffers.map((offer) => (
                   <div key={offer._id} className="flex items-center justify-between p-5 border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-[#0a0a0a] group hover:border-blue-500/50 transition-all">
                     <div className="flex items-center gap-5">
                       <div className="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-600 dark:text-green-400">
@@ -712,8 +724,8 @@ export default function Manage() {
                     </div>
                   </div>
                 ))}
-                {offers.length === 0 && (
-                  <div className="py-12 text-center text-gray-500 font-bold">No discounts or offers configured yet.</div>
+                {filteredOffers.length === 0 && (
+                  <div className="py-12 text-center text-gray-500 font-bold">{searchQuery ? 'No offers match your search.' : 'No discounts or offers configured yet.'}</div>
                 )}
               </div>
             </div>

@@ -2,11 +2,69 @@
 
 import { motion } from "framer-motion";
 import { User, Bell, Shield, Wallet, Save } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AccountDeletionFlow from "./AccountDeletionFlow";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
+
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    restaurantName: "",
+    restaurantCompany: "",
+    restaurantAddress: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch("/api/user/profile");
+      const data = await res.json();
+      if (res.ok) {
+        setProfile({
+          name: data.name || "",
+          email: data.email || "",
+          restaurantName: data.restaurantName || "",
+          restaurantCompany: data.restaurantCompany || "",
+          restaurantAddress: data.restaurantAddress || "",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load profile", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    setIsSaving(true);
+    setMessage({ type: "", text: "" });
+    try {
+      const res = await fetch("/api/user/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage({ type: "success", text: "Profile updated successfully!" });
+      } else {
+        setMessage({ type: "error", text: data.error || "Failed to update profile." });
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "An unexpected error occurred." });
+    } finally {
+      setIsSaving(false);
+      setTimeout(() => setMessage({ type: "", text: "" }), 3000);
+    }
+  };
 
   const container: any = {
     hidden: { opacity: 0 },
@@ -75,31 +133,80 @@ export default function Settings() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">First Name</label>
-                  <input type="text" defaultValue="Owner" className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</label>
-                  <input type="text" defaultValue="Account" className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                  <input type="email" defaultValue="owner@billify.com" className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Company</label>
-                  <input type="text" defaultValue="Billify Inc." className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" />
-                </div>
-              </div>
+              {isLoading ? (
+                <div className="py-12 flex justify-center text-gray-500">Loading profile data...</div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                      <input 
+                        type="text" 
+                        value={profile.name} 
+                        onChange={(e) => setProfile({...profile, name: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" 
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email Address (Cannot change)</label>
+                      <input 
+                        type="email" 
+                        value={profile.email} 
+                        disabled
+                        className="w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm outline-none font-medium opacity-70 cursor-not-allowed" 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Restaurant Name</label>
+                      <input 
+                        type="text" 
+                        value={profile.restaurantName} 
+                        onChange={(e) => setProfile({...profile, restaurantName: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Restaurant Company</label>
+                      <input 
+                        type="text" 
+                        value={profile.restaurantCompany}
+                        onChange={(e) => setProfile({...profile, restaurantCompany: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" 
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Restaurant Address</label>
+                      <input 
+                        type="text" 
+                        value={profile.restaurantAddress}
+                        onChange={(e) => setProfile({...profile, restaurantAddress: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium" 
+                      />
+                    </div>
+                  </div>
 
-              <div className="pt-6 border-t border-gray-200 dark:border-gray-800 flex justify-end">
-                <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors">
-                  <Save className="w-4 h-4" />
-                  Save Changes
-                </button>
-              </div>
+                  {message.text && (
+                    <div className={`p-3 rounded-lg text-sm font-medium ${message.type === 'error' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' : 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400'}`}>
+                      {message.text}
+                    </div>
+                  )}
+
+                  <div className="pt-6 border-t border-gray-200 dark:border-gray-800 flex justify-end">
+                    <button 
+                      onClick={handleSaveProfile}
+                      disabled={isSaving}
+                      className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-70"
+                    >
+                      {isSaving ? (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <Save className="w-4 h-4" />
+                      )}
+                      {isSaving ? 'Saving...' : 'Save Changes'}
+                    </button>
+                  </div>
+                </>
+              )}
 
               <AccountDeletionFlow />
             </div>

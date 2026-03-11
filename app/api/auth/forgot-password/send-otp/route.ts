@@ -32,11 +32,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const otps = db.collection("otps");
+    const otps = db.collection("reset_otps");
     
     // Ensure TTL Index exists
     console.log("Setting up TTL index for OTPs collection...");
-    await otps.createIndex({ createdAt: 1 }, { expireAfterSeconds: 60 }); // 60 seconds validity
+    await otps.createIndex({ createdAt: 1 }, { expireAfterSeconds: 300 }); // 5 minutes validity
 
     // Generate 6 digit OTP
     const rawOtp = crypto.randomInt(100000, 999999).toString();
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
         <div style="background-color: #f3f4f6; padding: 16px; border-radius: 8px; display: inline-block;">
           <h1 style="font-size: 32px; letter-spacing: 8px; color: #2563eb; margin: 0;">${rawOtp}</h1>
         </div>
-        <p style="color: #6b7280; font-size: 14px; margin-top: 24px;">This code will expire in 60 seconds.</p>
+        <p style="color: #6b7280; font-size: 14px; margin-top: 24px;">This code will expire in 5 minutes.</p>
       </div>
     `;
 

@@ -34,8 +34,9 @@ export default function ForgotPasswordPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // persistent timer state
+    const [sessionToken, setSessionToken] = useState("");
     const [timeLeft, setTimeLeft] = useState(0);
+    const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
 
     useEffect(() => {
         // Check local storage for an existing timer on mount
@@ -48,6 +49,16 @@ export default function ForgotPasswordPage() {
                 localStorage.removeItem("otp_timer_end");
             }
         }
+
+        const savedSessionEnd = localStorage.getItem("session_timer_end");
+        if (savedSessionEnd) {
+            const remaining = Math.floor((parseInt(savedSessionEnd, 10) - Date.now()) / 1000);
+            if (remaining > 0) {
+                setSessionTimeLeft(remaining);
+            } else {
+                localStorage.removeItem("session_timer_end");
+            }
+        }
     }, []);
 
     useEffect(() => {
@@ -55,7 +66,7 @@ export default function ForgotPasswordPage() {
         if (timeLeft > 0) {
             timer = setInterval(() => {
                 setTimeLeft((prev) => {
-                    if (prev <= 1) {
+                     if (prev <= 1) {
                         localStorage.removeItem("otp_timer_end");
                         return 0;
                     }
@@ -66,10 +77,36 @@ export default function ForgotPasswordPage() {
         return () => clearInterval(timer);
     }, [timeLeft]);
 
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (sessionTimeLeft > 0) {
+            timer = setInterval(() => {
+                setSessionTimeLeft((prev) => {
+                    if (prev <= 1) {
+                        localStorage.removeItem("session_timer_end");
+                        if (step === 3) {
+                            setStep(2);
+                            setError("Session expired. Please request a new OTP.");
+                        }
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [sessionTimeLeft, step]);
+
     const startTimer = () => {
-        const end = Date.now() + 60 * 1000;
+        const end = Date.now() + 300 * 1000;
         localStorage.setItem("otp_timer_end", end.toString());
-        setTimeLeft(60);
+        setTimeLeft(300);
+    };
+
+    const startSessionTimer = () => {
+        const end = Date.now() + 900 * 1000;
+        localStorage.setItem("session_timer_end", end.toString());
+        setSessionTimeLeft(900);
     };
 
     const handleSendOtp = async (e: React.FormEvent) => {
@@ -96,6 +133,8 @@ export default function ForgotPasswordPage() {
             if (response.ok) {
                 setStep(2);
                 startTimer();
+                setSessionTimeLeft(0);
+                localStorage.removeItem("session_timer_end");
             } else {
                 setError(data.error || "Failed to send OTP.");
             }
@@ -106,7 +145,7 @@ export default function ForgotPasswordPage() {
         }
     };
 
-    const handleVerifyOtpClick = (e: React.FormEvent) => {
+    const handleVerifyOtpClick = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
@@ -115,7 +154,32 @@ export default function ForgotPasswordPage() {
             setError(validation.error.issues[0].message);
             return;
         }
-        setStep(3);
+
+        setIsLoading(true);
+
+        try {
+            const response = await fetch("/api/auth/forgot-password/verify-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, otp }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setSessionToken(data.sessionToken);
+                setStep(3);
+                setTimeLeft(0);
+                localStorage.removeItem("otp_timer_end");
+                startSessionTimer();
+            } else {
+                setError(data.error || "Invalid OTP.");
+            }
+        } catch (err) {
+            setError("An unexpected error occurred.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleResetPassword = async (e: React.FormEvent) => {
@@ -134,19 +198,19 @@ export default function ForgotPasswordPage() {
             const response = await fetch("/api/auth/forgot-password/reset", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, otp, password }),
+                body: JSON.stringify({ sessionToken, password }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.removeItem("otp_timer_end");
+                localStorage.removeItem("session_timer_end");
                 // Redirect to login page with success param
                 window.location.href = "/login?reset=success";
             } else {
                 setError(data.error || "Failed to reset password.");
-                if (data.error === "Invalid OTP provided" || data.error === "OTP expired or not found. Please request a new one.") {
-                    setStep(2); // kick back to correct step if OTP was wrong
+                if (data.error === "Session expired or invalid. Please request a new OTP.") {
+                    setStep(2); // kick back to correct step
                 }
             }
         } catch (err) {
@@ -209,13 +273,18 @@ export default function ForgotPasswordPage() {
                     transition={{ duration: 0.5 }}
                     className="w-full max-w-md"
                 >
-                    <div className="text-center mb-10">
+                    <div className="text-center mb-8">
                         <h2 className="text-3xl font-bold mb-2">Reset Password</h2>
                         <p className="text-gray-500 dark:text-gray-400">
                             {step === 1 && "Enter your email to receive an OTP."}
                             {step === 2 && "Enter the OTP sent to your email."}
                             {step === 3 && "Create a new secure password."}
                         </p>
+                        {step === 3 && sessionTimeLeft > 0 && (
+                            <div className="mt-4 inline-flex items-center text-sm font-medium text-gray-400 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 px-3 py-1.5 rounded-full">
+                                Session expires in {Math.floor(sessionTimeLeft / 60)}:{(sessionTimeLeft % 60).toString().padStart(2, '0')}
+                            </div>
+                        )}
                     </div>
 
                     {error && (
@@ -290,7 +359,7 @@ export default function ForgotPasswordPage() {
                                         <div className="flex justify-between items-center mb-2">
                                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Enter OTP</label>
                                             {timeLeft > 0 ? (
-                                                <span className="text-sm text-gray-500">Expires in 00:{timeLeft.toString().padStart(2, '0')}</span>
+                                                <span className="text-sm text-gray-500">Expires in {Math.floor(timeLeft / 60).toString().padStart(2, '0')}:{(timeLeft % 60).toString().padStart(2, '0')}</span>
                                             ) : (
                                                 <button
                                                     type="button"

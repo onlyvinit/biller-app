@@ -8,6 +8,7 @@ import Modal from "@/components/ui/Modal";
 
 export default function SalesAndInvoices() {
   const [invoices, setInvoices] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -145,6 +146,12 @@ export default function SalesAndInvoices() {
     setIsModalOpen(true);
   };
 
+  const filteredInvoices = invoices.filter(i => 
+    (i.invoiceId && i.invoiceId.toLowerCase().includes(searchQuery.toLowerCase())) || 
+    i.clientName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    i.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -160,6 +167,8 @@ export default function SalesAndInvoices() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input 
               type="text" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search invoices..." 
               className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 font-medium"
             />
@@ -179,6 +188,8 @@ export default function SalesAndInvoices() {
             <div className="p-12 text-center text-red-500 font-medium">{error}</div>
           ) : invoices.length === 0 ? (
             <div className="p-12 text-center text-gray-500 font-medium">No invoices found. Invoices are automatically generated.</div>
+          ) : filteredInvoices.length === 0 ? (
+            <div className="p-12 text-center text-gray-500 font-medium">No invoices match your search.</div>
           ) : (
             <table className="w-full text-sm text-left min-w-[600px]">
               <thead className="text-xs text-gray-500 dark:text-gray-400 uppercase bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800 font-bold">
@@ -192,7 +203,7 @@ export default function SalesAndInvoices() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                {invoices.map((invoice) => (
+                {filteredInvoices.map((invoice) => (
                   <tr key={invoice.id || invoice._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors group">
                     <td className="px-6 py-4 font-bold flex items-center gap-2 whitespace-nowrap text-gray-900 dark:text-white">
                       <FileText className="w-4 h-4 text-blue-500" />
