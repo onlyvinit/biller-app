@@ -97,7 +97,7 @@ billify/
 
    ```env
    # MongoDB Connection
-   MONGO_URL= *ADD MONGODB CLUSTER URL HERE*
+   MONGO_URL=*USE MONGODB URL*
 
    # JWT Secret (use a strong random string)
    JWT_SECRET=your_secret_key_here
