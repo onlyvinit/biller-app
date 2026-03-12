@@ -221,7 +221,19 @@ export default function Settings() {
                   { label: "New Invoice Paid", desc: "Get notified when a client pays an invoice." },
                   { label: "Biller Activity", desc: "Get notified when a biller updates their details." },
                   { label: "Weekly Report", desc: "Receive a weekly summary of your financial activity." },
-                  { label: "System Updates", desc: "Important announcements and product updates." }
+                  { label: "System Updates", desc: "Important announcements and product updates." },
+                  { label: "Daily Sales Summary", desc: "End of day total revenue report" },
+                  { label: "Monthly Revenue Report", desc: "Financial month overview" },
+                  { label: "Payment Failed", desc: "When a payment doesn't go through" },
+                  { label: "Order Cancelled", desc: "By customer or biller" },
+                  { label: "Table Waiting Alert", desc: "Table has been waiting too long" },
+                  { label: "New Biller Login", desc: "Someone logged into POS" },
+                  { label: "New Device Login", desc: "Account accessed from new device" },
+                  { label: "Biller Key Generated", desc: "Access key was created" },
+                  { label: "Biller Added/Removed", desc: "Staff changes" },
+                  { label: "Subscription Expiring Soon", desc: "7 days before plan expires" },
+                  { label: "Software Update Available", desc: "New POS version released" },
+                  { label: "Sync Failed", desc: "Offline data failed to sync" }
                 ].map((item, i) => (
                   <div key={i} className="flex items-start justify-between gap-4 py-2">
                     <div>
