@@ -27,26 +27,32 @@ export default function Home() {
   const pricingTiers = [
     {
       name: "Starter",
-      price: "$0",
-      description: "Perfect for small businesses starting out.",
-      features: ["1 User", "100 Invoices/mo", "Basic Analytics", "Community Support"],
+      price: "₹5,000",
+      period: "/ 6 months",
+      description: "Target: Small restaurants, single outlet, just starting out.",
+      features: ["Up to 2 Billers & 1 POS", "Up to 500 Bills/mo", "Offline Mode & Thermal Printing", "Basic Analytics & Weekly Reports"],
       cta: "Get Started",
+      link: "/signup?plan=starter",
       popular: false,
     },
     {
       name: "Pro",
-      price: "$29",
-      description: "Advanced features for growing teams.",
-      features: ["5 Users", "Unlimited Invoices", "Advanced Analytics", "Priority Support", "Custom Branding"],
-      cta: "Try Pro",
+      price: "₹8,000",
+      period: "/ 1 year",
+      description: "Target: Growing restaurants, multiple staff, serious operations.",
+      features: ["Up to 5 Billers & 3 POS", "Unlimited Bills & Menus", "Loyalty, Tips & Split Billing", "AI Forecasting & Zomato/Swiggy Sync"],
+      cta: "Go Pro Now",
+      link: "/signup?plan=pro",
       popular: true,
     },
     {
-      name: "Enterprise",
-      price: "Custom",
-      description: "Ultimate power for large-scale operations.",
-      features: ["Unlimited Users", "Unlimited Invoices", "Custom Integrations", "Dedicated Account Manager", "SLA Support"],
+      name: "Custom",
+      price: "Let&apos;s Talk",
+      period: "",
+      description: "Target: Franchise, chains, or large scale operations.",
+      features: ["Unlimited Everything", "Custom Integrations", "Dedicated Account Manager", "White-labeling Options"],
       cta: "Contact Sales",
+      link: "/contact",
       popular: false,
     },
   ];
@@ -56,17 +62,19 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-[#030712]/70 backdrop-blur-md">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white" />
+          <Link href="/">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-xl tracking-tight">Billify</span>
             </div>
-            <span className="font-bold text-xl tracking-tight">Billify</span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">
             <Link href="#features" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Features</Link>
-            <Link href="#pricing" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Pricing</Link>
+            <Link href="/pricing" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Pricing</Link>
             <Link href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</Link>
           </nav>
 
@@ -74,15 +82,15 @@ export default function Home() {
             <Link href="/login" className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors hidden sm:block">
               Log in
             </Link>
-            <Link 
-              href="/dashboard" 
+            <Link
+              href="/dashboard"
               className="text-sm font-medium px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-md shadow-blue-500/20 hidden sm:block"
             >
               Dashboard
             </Link>
 
             {/* Mobile Menu Toggle */}
-            <button 
+            <button
               className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
@@ -102,37 +110,37 @@ export default function Home() {
               className="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-[#030712] overflow-hidden"
             >
               <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
-                <Link 
-                  href="#features" 
+                <Link
+                  href="#features"
                   className="text-lg font-medium p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-xl transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Features
                 </Link>
-                <Link 
-                  href="#pricing" 
+                <Link
+                  href="/pricing"
                   className="text-lg font-medium p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-xl transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Pricing
                 </Link>
-                <Link 
-                  href="/contact" 
+                <Link
+                  href="/contact"
                   className="text-lg font-medium p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-xl transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Contact
                 </Link>
                 <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800 flex flex-col gap-4">
-                  <Link 
-                    href="/login" 
+                  <Link
+                    href="/login"
                     className="text-center py-3 rounded-xl bg-gray-50 dark:bg-gray-900 font-medium"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Log in
                   </Link>
-                  <Link 
-                    href="/dashboard" 
+                  <Link
+                    href="/dashboard"
                     className="text-center py-3 rounded-xl bg-blue-600 text-white font-medium shadow-lg shadow-blue-500/20"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -167,7 +175,7 @@ export default function Home() {
               </span>
               Introducing Billify 2.0
             </motion.div>
-            
+
             <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-extrabold tracking-tight text-balance leading-tight">
               Smarter billing for <br className="hidden md:block" />
               <span className="text-gradient">modern businesses</span>
@@ -178,8 +186,8 @@ export default function Home() {
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 mt-8">
-              <Link 
-                href="/dashboard" 
+              <Link
+                href="/dashboard"
                 className="group flex items-center gap-2 px-8 py-4 rounded-full bg-foreground text-background hover:bg-foreground/90 font-medium text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1"
               >
                 Go to Dashboard
@@ -188,11 +196,11 @@ export default function Home() {
             </motion.div>
 
             {/* Dashboard Preview Image/Mockup */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="mt-16 w-full max-w-5xl rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-950/50 backdrop-blur-xl shadow-2xl p-2 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-tr from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
               <div className="w-full h-[400px] md:h-[600px] rounded-xl bg-gray-100 dark:bg-gray-900 flex items-center justify-center relative overflow-hidden border border-gray-200/50 dark:border-gray-800/50">
                 {/* Mockup UI Elements inside the preview */}
                 <div className="absolute top-4 left-4 right-4 h-12 rounded-lg bg-white dark:bg-gray-800 shadow-sm flex items-center px-4 justify-between">
@@ -203,7 +211,7 @@ export default function Home() {
                   </div>
                   <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-full" />
                 </div>
-                
+
                 <div className="absolute top-20 left-4 bottom-4 w-64 hidden lg:flex flex-col gap-4">
                   <div className="h-8 w-full bg-white dark:bg-gray-800 rounded-md shadow-sm opacity-50" />
                   <div className="h-8 w-3/4 bg-white dark:bg-gray-800 rounded-md shadow-sm opacity-50" />
@@ -250,17 +258,17 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <FeatureCard 
+            <FeatureCard
               icon={<BarChart3 className="w-6 h-6 text-blue-500" />}
               title="Real-time Analytics"
               description="Monitor your sales and revenue instantly as your billers generate invoices."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<ShieldCheck className="w-6 h-6 text-green-500" />}
               title="Secure Operations"
               description="Role-based access ensuring owner data is separate from biller environments."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<Download className="w-6 h-6 text-purple-500" />}
               title="Native Biller App"
               description="Downloadable Python-based software for fast, offline-capable billing at the counter."
@@ -271,9 +279,9 @@ export default function Home() {
         {/* The Tech Advantage Section */}
         <section className="container mx-auto px-4 py-24 border-t border-gray-200 dark:border-gray-800 relative overflow-hidden">
           <div className="absolute top-0 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
-          
+
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -289,7 +297,7 @@ export default function Home() {
               <p className="text-gray-600 dark:text-gray-400 text-lg mb-8 leading-relaxed text-balance">
                 Our architecture is optimized for high-volume transactions, ensuring your business never misses a beat even during peak hours.
               </p>
-              
+
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#0a0a0a] shadow-sm">
                   <div className="text-3xl font-bold text-blue-600 mb-1">0ms</div>
@@ -302,7 +310,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -325,11 +333,11 @@ export default function Home() {
         {/* Pricing Section */}
         <section id="pricing" className="container mx-auto px-4 py-24 border-t border-gray-200 dark:border-gray-800 relative overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
-          
+
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, transparent pricing</h2>
             <p className="text-gray-600 dark:text-gray-400 text-lg">
-              Choose the plan that's right for your business. Grow as you go.
+              Choose the plan that&apos;s right for your business. Scalable solutions for every stage of growth.
             </p>
           </div>
 
@@ -337,6 +345,12 @@ export default function Home() {
             {pricingTiers.map((tier, idx) => (
               <PricingCard key={idx} {...tier} />
             ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <Link href="/pricing" className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0a0a0a] hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors font-semibold shadow-sm">
+              See detailed plan comparison <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </section>
 
@@ -350,26 +364,26 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <TestimonialCard 
+            <TestimonialCard
               quote="Billify has completely changed how we handle our peak hours. The speed is unmatched."
               author="Sarah Chen"
               role="Owner, Bloom Cafe"
               initial="S"
             />
-            <TestimonialCard 
+            <TestimonialCard
               quote="The real-time analytics gave me insights I never had before. A game changer for my business."
               author="Marcus Wright"
               role="CEO, Wright Logistics"
               initial="M"
             />
-            <TestimonialCard 
+            <TestimonialCard
               quote="Switching was the best decision. Our billers love the intuitive desktop app."
               author="Elena Rodriguez"
               role="Manager, Gourmet Market"
               initial="E"
             />
           </div>
-          
+
           {/* Logo Marquee placeholder */}
           <div className="mt-20 flex flex-wrap justify-center items-center gap-12 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
             {["Acme Corp", "TechFlow", "Global Industries", "Logistics Pro", "Cloud Sync"].map((logo) => (
@@ -384,10 +398,10 @@ export default function Home() {
       <footer className="relative border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#030712] overflow-hidden pt-16 pb-8">
         {/* Dynamic Background Elements for Footer */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
-            
+
             {/* Brand Section */}
             <div className="col-span-1 lg:col-span-1">
               <div className="flex items-center gap-2 mb-6">
@@ -417,7 +431,7 @@ export default function Home() {
               <h3 className="font-semibold mb-6">Product</h3>
               <ul className="space-y-3">
                 <li><Link href="#features" className="text-gray-500 hover:text-blue-600 transition-colors text-sm">Features</Link></li>
-                <li><Link href="#pricing" className="text-gray-500 hover:text-blue-600 transition-colors text-sm">Pricing</Link></li>
+                <li><Link href="/pricing" className="text-gray-500 hover:text-blue-600 transition-colors text-sm">Pricing</Link></li>
                 <li><Link href="/contact" className="text-gray-500 hover:text-blue-600 transition-colors text-sm">Contact Us</Link></li>
                 <li><Link href="/dashboard" className="text-gray-500 hover:text-blue-600 transition-colors text-sm">Dashboard</Link></li>
               </ul>
@@ -474,9 +488,9 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            
+
           </div>
-          
+
           <div className="pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-gray-500 text-sm">© {new Date().getFullYear()} Billify Inc. All rights reserved.</p>
             <div className="flex items-center gap-6 text-sm text-gray-500">
@@ -502,12 +516,12 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
   );
 }
 
-function PricingCard({ name, price, description, features, cta, popular }: { name: string, price: string, description: string, features: string[], cta: string, popular: boolean }) {
+function PricingCard({ name, price, period, description, features, cta, link, popular }: { name: string, price: string, period: string, description: string, features: string[], cta: string, link: string, popular: boolean }) {
   return (
     <div className={cn(
       "flex flex-col p-8 rounded-3xl border transition-all duration-300 relative",
-      popular 
-        ? "bg-white dark:bg-[#0a0a0a] border-blue-600/50 shadow-2xl shadow-blue-500/10 scale-105 z-10" 
+      popular
+        ? "bg-white dark:bg-[#0a0a0a] border-blue-600/50 shadow-2xl shadow-blue-500/10 scale-105 z-10"
         : "bg-white/50 dark:bg-[#0a0a0a]/50 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 hover:bg-white dark:hover:bg-[#0a0a0a]"
     )}>
       {popular && (
@@ -520,8 +534,8 @@ function PricingCard({ name, price, description, features, cta, popular }: { nam
         <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{description}</p>
       </div>
       <div className="mb-8 flex items-baseline gap-1">
-        <span className="text-4xl font-bold">{price}</span>
-        {price !== "Custom" && <span className="text-gray-500 text-sm font-medium">/month</span>}
+        <span className="text-4xl font-bold tracking-tight">{price}</span>
+        {period && <span className="text-gray-500 text-sm font-medium">{period}</span>}
       </div>
       <ul className="space-y-4 mb-10 flex-1">
         {features.map((feature, i) => (
@@ -533,12 +547,12 @@ function PricingCard({ name, price, description, features, cta, popular }: { nam
           </li>
         ))}
       </ul>
-      <Link 
-        href="/signup" 
+      <Link
+        href={link}
         className={cn(
           "w-full py-3 rounded-full font-bold text-sm transition-all text-center",
-          popular 
-            ? "bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/25" 
+          popular
+            ? "bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/25"
             : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700"
         )}
       >
@@ -553,7 +567,7 @@ function TechBentoCard({ icon, title, gradient }: { icon: React.ReactNode, title
     <div className={cn(
       "p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0a0a0a] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group overflow-hidden relative",
     )}>
-      <div className={cn("absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500", gradient)} />
+      <div className={cn("absolute inset-0 bg-linear-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500", gradient)} />
       <div className="relative z-10">
         <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-center justify-center mb-4 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           {icon}
@@ -569,10 +583,10 @@ function TestimonialCard({ quote, author, role, initial }: { quote: string, auth
     <div className="p-8 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-xl hover:bg-white dark:hover:bg-[#0a0a0a] hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 transition-all group">
       <Quote className="w-10 h-10 text-blue-600/20 mb-6 group-hover:text-blue-600/40 transition-colors" />
       <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-8 italic">
-        "{quote}"
+        &quot;{quote}&quot;
       </p>
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
+        <div className="w-12 h-12 rounded-full bg-linear-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
           {initial}
         </div>
         <div>
